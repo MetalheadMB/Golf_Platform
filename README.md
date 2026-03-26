@@ -21,86 +21,35 @@ A full-stack web application designed for golf tournament organizers to manage u
 - **State Management:** React Hooks (`useState`, `useEffect`, `useContext`)
 
 ---
-
-## 📦 Installation & Setup
+Markdown## 📦 Installation & Setup
 
 ### 1. Clone the repository
 ```bash
-git clone [https://github.com/your-username/Golf_Platform.git](https://github.com/your-username/Golf_Platform.git)
+git clone https://github.com/your-username/Golf_Platform.git
 cd Golf_Platform
-
-2. Backend Setup
-Navigate to the backend folder and install dependencies:
-
-cd Backend
+2. Backend SetupNavigate to the backend folder and install dependencies:Bashcd backend
 npm install
-
-Create a .env file in the /Backend directory:
-PORT=5000
+Create a .env file in the /backend directory:PlaintextPORT=5000
 SUPABASE_URL=your_supabase_url
 SUPABASE_ANON_KEY=your_anon_key
 JWT_SECRET=your_super_secret_key
-
-3. Frontend Setup
-Navigate to the frontend folder and install dependencies:
-
-cd ../Frontend
+3. Frontend SetupNavigate to the frontend folder and install dependencies:Bashcd ../frontend
 npm install
-
-4. Running the Project
-Start Backend:
-
-cd Backend
+4. Running the ProjectStart Backend:Bashcd backend
 node server.js
-
-Start Frontend:
-cd Frontend
+Start Frontend:Bashcd frontend
 npm run dev
-
-Method,Endpoint,Description
-POST,/auth/register,Register a new user with hashed passwords
-POST,/auth/login,Authenticate user and receive a JWT
-GET,/api/scores,Fetch all golf scores (Protected Route)
-POST,/api/matches,Create a new match entry
-
-## 📂 Project Structure
-Golf_Platform/
+🔌 API Endpoints (RESTful)MethodEndpointDescriptionPOST/auth/registerRegister a new user with hashed passwordsPOST/auth/loginAuthenticate user and receive a JWTGET/api/scoresFetch all golf scores (Protected Route)POST/api/matchesCreate a new match entry📂 Project StructurePlaintextGolf_Platform/
 ├── backend/
-│ ├── controllers/
-│ ├── routes/
-│ ├── middleware/
-│ └── server.js
-│
-├── frontend/
-│ ├── app/
-│ ├── components/
-│ └── styles/
-
-
-## 🧠 Key Learnings
-
-- Built full-stack architecture from scratch
-- Implemented authentication & authorization
-- Designed relational database schema
-- Created admin workflows & analytics
-- Integrated business logic (draw + rewards system)
-
----
-
-## 🚀 Future Improvements
-
-- Stripe payment integration
-- Email notifications
-- Real-time leaderboard
-- Mobile responsiveness improvements
-
----
-
-## 📌 Author
-
-Mitul Bhale  
-IIT Roorkee  
-
+│   ├── controllers/
+│   ├── routes/
+│   ├── middleware/
+│   └── server.js
+└── frontend/
+    ├── app/
+    ├── components/
+    └── styles/
+🧠 Key LearningsFull-Stack Architecture: Built a decoupled system from scratch using Node.js and Next.js.Security: Implemented robust Authentication & Authorization using JWT and Bcrypt.Database Design: Architected a relational schema in PostgreSQL (Supabase) to handle complex golf data.Business Logic: Developed workflows for score tracking, draws, and a rewards system.🚀 Future ImprovementsPayments: Stripe integration for tournament entry fees.Communication: Automatic email notifications for match updates.Engagement: Real-time leaderboard using Supabase webhooks.UI/UX: Enhancing mobile responsiveness for on-course use.📌 AuthorMitul Bhale IIT Roorkee💡 InspirationA platform designed to bridge the gap between gaming, rewards, and social impact through meaningful charity contributions.
 ---
 
 ## 💡 Inspiration
