@@ -4,18 +4,21 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  
   const router = useRouter();
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Set the Base URL variable
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
   const login = async () => {
     try {
       setLoading(true);
 
-      const res = await fetch("http://localhost:5000/auth/login", {
+      // Using the dynamic API_URL for the live deployment
+      const res = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -28,17 +31,17 @@ export default function LoginPage() {
         return;
       }
 
+      // Store the JWT token for future authenticated requests
       localStorage.setItem("token", data.token);
       router.push("/dashboard");
 
     } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
+      console.error("Login Error:", err);
+      alert("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-gray-100">

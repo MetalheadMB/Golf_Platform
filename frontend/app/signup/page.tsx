@@ -11,6 +11,9 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  // Create the Base URL variable
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
   const signup = async () => {
     if (!email || !password) {
       alert("Please fill all fields");
@@ -24,7 +27,8 @@ export default function SignupPage() {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/auth/register", {
+      // Updated fetch using the dynamic API_URL and your /auth route
+      const res = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,13 +46,12 @@ export default function SignupPage() {
       alert("Signup successful! Please login.");
       router.push("/login");
     } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
+      console.error("Signup Error:", err);
+      alert("Something went wrong. Check the console for details.");
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex flex-col">
       <Navbar />

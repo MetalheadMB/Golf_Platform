@@ -13,13 +13,17 @@ export default function Dashboard() {
 
   const router = useRouter();
 
+  // Define the Base URL variable
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
   const getScores = useCallback(async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/scores", {
+      // Updated: Dynamic API_URL + /scores route
+      const res = await fetch(`${API_URL}/scores`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -37,7 +41,6 @@ export default function Dashboard() {
 
       setScores(data);
     } catch (err: any) {
-      // check here in case the error object itself contains the message
       if (err.message === "Subscription required") {
         router.push("/subscribe");
       } else {
@@ -46,7 +49,7 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  }, [router]);
+  }, [router, API_URL]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -63,15 +66,20 @@ export default function Dashboard() {
   };
 
   const runDraw = async () => {
-    const res = await fetch("http://localhost:5000/draw/run", {
-      method: "POST",
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      alert("Error running draw");
-      return;
+    try {
+      // Updated: Dynamic API_URL + /draw/run route
+      const res = await fetch(`${API_URL}/draw/run`, {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert("Error running draw");
+        return;
+      }
+      setDrawResult(data);
+    } catch (err) {
+      alert("Failed to connect to server");
     }
-    setDrawResult(data);
   };
 
   const addScore = async () => {
@@ -80,24 +88,31 @@ export default function Dashboard() {
       return;
     }
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/scores/add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ score: Number(score), date }),
-    });
+    
+    try {
+      // Updated: Dynamic API_URL + /scores/add route
+      const res = await fetch(`${API_URL}/scores/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ score: Number(score), date }),
+      });
 
-    const data = await res.json();
-    if (!res.ok) {
-      alert(data.message || "Error adding score");
-      return;
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.message || "Error adding score");
+        return;
+      }
+      setScore("");
+      setDate("");
+      getScores();
+    } catch (err) {
+      alert("Failed to add score. Check your connection.");
     }
-    setScore("");
-    setDate("");
-    getScores();
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 p-6 flex flex-col items-center">

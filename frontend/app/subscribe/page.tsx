@@ -2,21 +2,35 @@
 
 export default function SubscribePage() {
 
+  // Define the Base URL variable
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
   const subscribe = async (type: string) => {
     const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:5000/subscription", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ type }),
-    });
+    try {
+      // Updated: Dynamic API_URL + /subscription route
+      const res = await fetch(`${API_URL}/subscription`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ type }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    alert(data.message);
+      if (!res.ok) {
+        alert(data.message || "Subscription failed");
+        return;
+      }
+
+      alert(data.message || "Subscribed successfully!");
+    } catch (err) {
+      console.error("Subscription Error:", err);
+      alert("Failed to connect to the server.");
+    }
   };
 
   return (

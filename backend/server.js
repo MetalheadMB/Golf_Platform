@@ -11,7 +11,10 @@ import charityRoutes from "./routes/charityRoutes.js";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "https://golfplatform-brown.vercel.app", 
+  credentials: true
+}));
 app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/scores", scoreRoutes);
@@ -28,7 +31,7 @@ app.get("/", (req, res) => {
 // This should now print your actual URL instead of undefined
 console.log("ENV:", process.env.SUPABASE_URL);
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

@@ -12,11 +12,15 @@ export default function AdminPage() {
 
   const router = useRouter();
 
+  // Define the Base URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
   // 1. Fetch Analytics
   const fetchAnalytics = useCallback(async () => {
     setLoadingAnalytics(true);
     try {
-      const res = await fetch("http://localhost:5000/analytics");
+      // Corrected: Removed /api/ because your backend uses app.use("/analytics", ...)
+      const res = await fetch(`${API_URL}/analytics`); 
       const data = await res.json();
       if (res.ok) setAnalytics(data);
     } catch (err) {
@@ -24,18 +28,19 @@ export default function AdminPage() {
     } finally {
       setLoadingAnalytics(false);
     }
-  }, []);
+  }, [API_URL]);
 
   // 2. Fetch Winners
   const fetchWinners = useCallback(async () => {
     try {
-      const res = await fetch("http://localhost:5000/winners");
+      // Corrected: Added /winners suffix
+      const res = await fetch(`${API_URL}/winners`);
       const data = await res.json();
       if (res.ok) setWinners(data);
     } catch (err) {
       console.error("Failed to fetch winners", err);
     }
-  }, []);
+  }, [API_URL]);
 
   // 3. Initial Load & Auth
   useEffect(() => {
@@ -52,7 +57,8 @@ export default function AdminPage() {
   const runDraw = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/draw/run", {
+      // Corrected: Uses API_URL and /draw/run
+      const res = await fetch(`${API_URL}/draw/run`, {
         method: "POST",
       });
       const data = await res.json();
@@ -63,8 +69,8 @@ export default function AdminPage() {
       }
 
       setDrawResult(data);
-      fetchWinners();   // Refresh winners list
-      fetchAnalytics(); // Refresh analytics (total draws/winners will change)
+      fetchWinners();   
+      fetchAnalytics(); 
     } catch (err) {
       alert("Server connection failed");
     } finally {
@@ -75,7 +81,8 @@ export default function AdminPage() {
   // 5. Update Status
   const updateStatus = async (id: string, status: string) => {
     try {
-      const res = await fetch("http://localhost:5000/winners/status", {
+      // Corrected: Uses API_URL and /winners/status
+      const res = await fetch(`${API_URL}/winners/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ winner_id: id, status }),
@@ -83,7 +90,7 @@ export default function AdminPage() {
 
       if (res.ok) {
         fetchWinners();
-        fetchAnalytics(); // Refresh prize total if marked 'paid'
+        fetchAnalytics(); 
       }
     } catch (err) {
       alert("Failed to update status");
